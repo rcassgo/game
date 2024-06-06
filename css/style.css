@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 100vh; /* 최소 높이를 브라우저 전체 높이로 설정 */
+    background: rgb(255, 255, 255);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(196, 196, 196, 1) 100%);
+    display: flex;
+    justify-content: center; /* 가로 중앙 배치 */
+    align-items: center; /* 세로 중앙 배치 */
+}
+
+.bg {
+    background-image: url("/game/img/background.png");
+    background-size: cover;
+    width: 1000px; /* 이미지의 고정된 너비 */
+    height: 600px; /* 이미지의 고정된 높이 */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 선택적으로 그림자 추가 */
+}
