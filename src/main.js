@@ -3,43 +3,111 @@ const play = document.querySelector('.play');
 const pause = document.querySelector('.pause');
 const timer = document.querySelector('.gameInfo__time');
 const targetCount = document.querySelector('.gameInfo__targetCount');
+const menu = document.querySelector('.gameMenu');
+const restartBtn = document.querySelector('.gameMenu__restart');
+const result = document.querySelector('.gameMenu__result')
 const target = document.querySelector('.target');
 const bug = document.querySelector('.bug');
 
-// 시작
-play.addEventListener('click',(e) => {
-    play.classList.remove('statusOpen');
-    pause.classList.add('statusOpen');
+const maxTime = 3;
+let time = maxTime;
+let intervalId = null;
+let gameOn = true;
+menu.style.display = 'none';
 
-    let time = 20;
-    let intervalId = null;
-    timer.innerText = `${time}`;
+
+// 시작
+play.addEventListener('click',startGame);
+function startGame() {
+    toggleStatus(true);
+    toggleMenu(false);
+    if(gameOn){
+        inGame();
+    }
     intervalId = setInterval(() => {
-        time = time - 0.01;
-        if (time <= 0) {
-                alert('시간초과!');
-                clearInterval(intervalId);
-                return;
+        time = time - 0.1;
+        if (time < 0) {
+            overTime()
         } else {
-            if(!pause.classList.contains('statusOpen')){
-                alert('정지!');
-                clearInterval(intervalId);
-                return;
-            }
             const seconds = time;
             const decimal = Math.floor((time%1)*10);
             //const decimal2 = Math.floor((time*100)%10);
-            timer.innerText = `${seconds < 10 ? '0' : ''}${Math.floor(seconds)}:${decimal}`;
+            timer.innerText = `${Math.floor(seconds)}.${decimal}`;
         }
-    }, 10);
-})
+    }, 100);
+}
 
 // 정지
 pause.addEventListener('click',(e) => {
-    play.classList.add('statusOpen');
-    pause.classList.remove('statusOpen');
+    if (intervalId) {
+        clearTimer()
+        toggleStatus(false);
+        toggleMenu(true);
+        result.innerText = '다시시작';
+    }
 })
 
+// 시간초과
+function overTime(){
+    fail();
+    result.innerText = '시간이 초과되었습니다!';
+    return;
+}
+
+// 실패
+function fail() {
+    clearTimer()
+    toggleStatus(false);
+    toggleMenu(true);
+    play.style.visibility = 'hidden';
+}
+
+// 재시작
+restartBtn.addEventListener('click', resetGame);
+function resetGame() {
+    intervalId = null;
+    time = maxTime;
+    timer.innerText = `${maxTime}.0`;
+    play.style.visibility = 'visible';
+    gameOn = true;
+    toggleStatus(false);
+    toggleMenu(false);
+}
+
+// 시작,정지버튼
+function toggleStatus(shouldShow) {
+    play.style.display = shouldShow ? 'none' : 'block';
+    pause.style.display = shouldShow ? 'block' : 'none';
+}
+
+// 하단메뉴
+function toggleMenu(shouldShow) {
+    // menu.style.visibility = shouldShow ? 'visible' : 'hidden';
+    if (menu.style.display === 'flex' && !shouldShow) {
+        menu.style.display = 'none';
+    } else if (menu.style.display !== 'flex' && shouldShow) {
+        menu.style.display = 'flex';
+    }
+}
+
+// 타이머 정지
+function clearTimer() {
+    clearInterval(intervalId);
+    intervalId = null;
+}
+
+function inGame() {
+    gameOn = false;
+    let newTarget = target;
+    document.body.appendChild(newTarget);
+    
+    for(let i=0; i < 20; i++){
+        let randomTop = Math.floor(Math.random() * 250) + 'px';
+        let randomLeft = Math.floor(Math.random() * 890) + 'px';
+        target.style.top = randomTop;
+        target.style.left = randomLeft;
+    }
+}
 
 // 1. 게임 스타트
 // 실행버튼을 누르면 bug와 target을 랜덤위치에 정해진 갯수만큼 생성
