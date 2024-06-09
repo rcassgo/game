@@ -48,7 +48,8 @@ body {
 
 .bg {
     position: relative;
-    background-image: url("/img/background.png");
+    /* 임시 경로 */
+    background-image: url("../img/background.png");
     background-size: cover;
     display: flex;
     flex-direction: column;
