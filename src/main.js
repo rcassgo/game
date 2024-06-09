@@ -5,11 +5,20 @@ const timer = document.querySelector('.gameInfo__time');
 const targetCount = document.querySelector('.gameInfo__targetCount');
 const menu = document.querySelector('.gameMenu');
 const restartBtn = document.querySelector('.gameMenu__restart');
-const result = document.querySelector('.gameMenu__result')
+const result = document.querySelector('.gameMenu__result');
+
+const field = document.querySelector('.gameField');
 const target = document.querySelector('.target');
 const bug = document.querySelector('.bug');
+let fieldWidth = field.offsetWidth;
+let fieldHeight = field.offsetHeight;
+let targetWidth = target.offsetWidth;
+let targetHeight = target.offsetHeight;
+let bugWidth = bug.offsetWidth;
+let bugHeight = bug.offsetHeight;
+field.innerHTML = '';
 
-const maxTime = 3;
+const maxTime = 10;
 let time = maxTime;
 let intervalId = null;
 let gameOn = true;
@@ -27,7 +36,7 @@ function startGame() {
     intervalId = setInterval(() => {
         time = time - 0.1;
         if (time < 0) {
-            overTime()
+            overTime();
         } else {
             const seconds = time;
             const decimal = Math.floor((time%1)*10);
@@ -47,10 +56,35 @@ pause.addEventListener('click',(e) => {
     }
 })
 
+// clickTarget
+function clickTarget(e){
+    e.target.parentNode.removeChild(e.target); // 자기 자신 삭제 못함. 그래서 parentNode
+
+    const countTarget = document.querySelectorAll('.target').length; // 현재 타겟의 수
+    if (countTarget === 0) { // 클릭된 타겟의 수와 현재 타겟의 수가 같으면
+        clear(); // clear 함수 호출
+    }
+}
+
+// clear
+function clear(){
+    fail();
+    result.innerText = '게임 클리어!';
+    return;
+}
+
+
 // 시간초과
 function overTime(){
     fail();
     result.innerText = '시간이 초과되었습니다!';
+    return;
+}
+
+// bug 클릭
+function gameOver(){
+    fail();
+    result.innerText = '실패!!';
     return;
 }
 
@@ -69,6 +103,7 @@ function resetGame() {
     time = maxTime;
     timer.innerText = `${maxTime}.0`;
     play.style.visibility = 'visible';
+    field.innerHTML = '';
     gameOn = true;
     toggleStatus(false);
     toggleMenu(false);
@@ -96,16 +131,26 @@ function clearTimer() {
     intervalId = null;
 }
 
+// 게임필드
 function inGame() {
     gameOn = false;
-    let newTarget = target;
-    document.body.appendChild(newTarget);
-    
-    for(let i=0; i < 20; i++){
-        let randomTop = Math.floor(Math.random() * 250) + 'px';
-        let randomLeft = Math.floor(Math.random() * 890) + 'px';
-        target.style.top = randomTop;
-        target.style.left = randomLeft;
+    // console.log(fieldWidth,fieldHeight);
+    // console.log(targetWidth,targetHeight);
+    // console.log(bugWidth,bugHeight);
+
+    for(let i=0; i<10; i++){
+        let cloneTarget = target.cloneNode(true);
+        cloneTarget.style.top = Math.random() * (fieldHeight - targetHeight) + 'px';
+        cloneTarget.style.left = Math.random() * (fieldWidth - targetWidth) + 'px';
+        cloneTarget.addEventListener('click',(e) => { clickTarget(e); });
+
+        field.appendChild(cloneTarget);
+
+        let cloneBug = bug.cloneNode(true);
+        cloneBug.style.top = Math.random() * (fieldHeight - bugHeight) + 'px';
+        cloneBug.style.left = Math.random() * (fieldWidth - bugWidth) + 'px';
+        cloneBug.addEventListener('click',gameOver);
+        field.appendChild(cloneBug);
     }
 }
 
