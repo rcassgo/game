@@ -154,7 +154,7 @@ body {
 .target2 {
     position: absolute;
     cursor: pointer;
-    width: 3rem;
+    width: 4.5rem;
     z-index: 2;
     top: 1%;
     left: 1%;
