@@ -9,11 +9,14 @@ const result = document.querySelector('.gameMenu__result');
 
 const field = document.querySelector('.gameField');
 const target = document.querySelector('.target');
+const target2 = document.querySelector('.target2');
 const bug = document.querySelector('.bug');
 let fieldWidth = field.offsetWidth;
 let fieldHeight = field.offsetHeight;
 let targetWidth = target.offsetWidth;
 let targetHeight = target.offsetHeight;
+let target2Width = target2.offsetWidth;
+let target2Height = target2.offsetHeight;
 let bugWidth = bug.offsetWidth;
 let bugHeight = bug.offsetHeight;
 field.innerHTML = '';
@@ -23,6 +26,7 @@ let time = maxTime;
 let intervalId = null;
 let gameOn = true;
 menu.style.display = 'none';
+let isMenuActive = false;
 
 
 // 시작
@@ -58,10 +62,11 @@ pause.addEventListener('click',(e) => {
 
 // clickTarget
 function clickTarget(e){
+    if(isMenuActive) return;
     e.target.parentNode.removeChild(e.target); // 자기 자신 삭제 못함. 그래서 parentNode
-
     const countTarget = document.querySelectorAll('.target').length; // 현재 타겟의 수
-    if (countTarget === 0) { // 클릭된 타겟의 수와 현재 타겟의 수가 같으면
+    const countTarget2 = document.querySelectorAll('.target2').length; // 현재 타겟의 수
+    if (countTarget === 0 && countTarget2 === 0) { // 클릭된 타겟의 수와 현재 타겟의 수가 같으면
         clear(); // clear 함수 호출
     }
 }
@@ -73,6 +78,13 @@ function clear(){
     return;
 }
 
+// bug 클릭
+function gameOver(){
+    if(isMenuActive) return;
+    fail();
+    result.innerText = '실패!!';
+    return;
+}
 
 // 시간초과
 function overTime(){
@@ -81,12 +93,6 @@ function overTime(){
     return;
 }
 
-// bug 클릭
-function gameOver(){
-    fail();
-    result.innerText = '실패!!';
-    return;
-}
 
 // 실패
 function fail() {
@@ -120,8 +126,10 @@ function toggleMenu(shouldShow) {
     // menu.style.visibility = shouldShow ? 'visible' : 'hidden';
     if (menu.style.display === 'flex' && !shouldShow) {
         menu.style.display = 'none';
+        isMenuActive = false;
     } else if (menu.style.display !== 'flex' && shouldShow) {
         menu.style.display = 'flex';
+        isMenuActive = true;
     }
 }
 
@@ -138,14 +146,21 @@ function inGame() {
     // console.log(targetWidth,targetHeight);
     // console.log(bugWidth,bugHeight);
 
-    for(let i=0; i<10; i++){
+    for(let i=0; i<5; i++){
         let cloneTarget = target.cloneNode(true);
         cloneTarget.style.top = Math.random() * (fieldHeight - targetHeight) + 'px';
         cloneTarget.style.left = Math.random() * (fieldWidth - targetWidth) + 'px';
         cloneTarget.addEventListener('click',(e) => { clickTarget(e); });
-
         field.appendChild(cloneTarget);
 
+        let cloneTarget2 = target2.cloneNode(true);
+        cloneTarget2.style.top = Math.random() * (fieldHeight - targetHeight) + 'px';
+        cloneTarget2.style.left = Math.random() * (fieldWidth - targetWidth) + 'px';
+        cloneTarget2.addEventListener('click',(e) => { clickTarget(e); });
+        field.appendChild(cloneTarget2);
+
+    }
+    for(let i=0; i<10; i++){
         let cloneBug = bug.cloneNode(true);
         cloneBug.style.top = Math.random() * (fieldHeight - bugHeight) + 'px';
         cloneBug.style.left = Math.random() * (fieldWidth - bugWidth) + 'px';
