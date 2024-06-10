@@ -50,14 +50,15 @@ body {
     position: relative;
     /* 임시 경로 */
     background-image: url("../img/background.png");
-    background-size: cover;
+    background-size: 100% 600px ;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 1000px; /* 이미지의 고정된 너비 */
     height: 600px; /* 이미지의 고정된 높이 */
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 선택적으로 그림자 추가 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 }
 
 /* Top Menu */
