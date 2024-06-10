@@ -28,11 +28,6 @@ let gameOn = true;
 menu.style.display = 'none';
 let isMenuActive = false;
 
-window.onload = function() {
-    window.scrollTo(0, document.body.scrollHeight);
-}
-onload();
-
 
 // 시작
 play.addEventListener('click',startGame);
