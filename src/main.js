@@ -154,11 +154,12 @@ function inGame() {
         field.appendChild(cloneTarget);
 
         let cloneTarget2 = target2.cloneNode(true);
-        cloneTarget2.style.top = Math.random() * (fieldHeight - targetHeight) + 'px';
-        cloneTarget2.style.left = Math.random() * (fieldWidth - targetWidth) + 'px';
+        cloneTarget2.style.top = Math.random() * (fieldHeight - target2Height) + 'px';
+        cloneTarget2.style.left = Math.random() * (fieldWidth - target2Width) + 'px';
         cloneTarget2.addEventListener('click',(e) => { clickTarget(e); });
+        console.log(target2Height);
+        console.log(cloneTarget2.style.top);
         field.appendChild(cloneTarget2);
-
     }
     for(let i=0; i<10; i++){
         let cloneBug = bug.cloneNode(true);
