@@ -157,8 +157,6 @@ function inGame() {
         cloneTarget2.style.top = Math.random() * (fieldHeight - target2Height) + 'px';
         cloneTarget2.style.left = Math.random() * (fieldWidth - target2Width) + 'px';
         cloneTarget2.addEventListener('click',(e) => { clickTarget(e); });
-        console.log(target2Height);
-        console.log(cloneTarget2.style.top);
         field.appendChild(cloneTarget2);
     }
     for(let i=0; i<10; i++){
